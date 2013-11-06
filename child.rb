@@ -5,19 +5,18 @@ require 'thin'
 require 'pony'
 require 'colorize'
 require './thread_pool'
-require './settings'
 require './mailer'
 
 def run(pool_size, port="8000")
 	$tp = ThreadPool.new(pool_size)
+	Mailer.instance # raise error if credentials are not full
 	Thin::Runner.new(["--port", port, "--address", "localhost", "--rackup", "rackup.ru", "start"]).run!
 end
 
 post '/mail' do
 	@json = JSON.parse(request.body.read)
 	$tp.schedule do
-		mailer = Mailer.new(EMAIL_CREDENTIALS)
-		mailer.send(@json)
+		Mailer.instance.send(@json)
 	end
 end
 

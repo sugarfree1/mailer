@@ -1,4 +1,9 @@
+require 'singleton'
+require 'colorize'
+require './settings'
+
 class Mailer
+	include Singleton
 
 	attr_reader :user_name
 	attr_reader :password
@@ -9,8 +14,8 @@ class Mailer
 	attr_reader :enable_starttls_auto
 	attr_reader :use_tls
 
-	def initialize(credentials)
-		@credentials = credentials
+	def initialize()
+		@credentials = EMAIL_CREDENTIALS
 
 		@use_tls = get_credential("use_tls")
 		@user_name = get_credential("user_name")
