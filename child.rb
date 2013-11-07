@@ -2,20 +2,23 @@ require 'rubygems'
 require 'sinatra'
 require 'json'
 require 'thin'
+require 'pony'
+require 'colorize'
 require './thread_pool'
+require './mailer'
 
 def run(pool_size, port="8000")
 	$tp = ThreadPool.new(pool_size)
+	Mailer.instance # raise error if credentials are not full
 	Thin::Runner.new(["--port", port, "--address", "localhost", "--rackup", "rackup.ru", "start"]).run!
 end
 
-post '/mail' do 
-	puts "mail"
+post '/mail' do
 	@json = JSON.parse(request.body.read)
-	puts @json["text"]
 	$tp.schedule do
-		puts "Job started by thread #{Thread.current[:id]}"
-		sleep rand(10) + 5
-		puts "Job finished by thread #{Thread.current[:id]}"
+		Mailer.instance.send(@json)
 	end
 end
+
+
+
