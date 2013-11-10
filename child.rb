@@ -10,7 +10,7 @@ require './loggers'
 
 
 def run(pool_size, port=8000)
-	$tp = ThreadPool.new(pool_size)
+	$thread_pool = ThreadPool.new(pool_size)
 	logger = ChildProcessLogger.new
 	begin
 		Mailer.instance # raise error if credentials are not full
@@ -22,9 +22,9 @@ def run(pool_size, port=8000)
 end
 
 post '/mail' do
-	@json = JSON.parse(request.body.read)
-	$tp.schedule do
-		Mailer.instance.send(@json)
+	data = JSON.parse(request.body.read)
+	$thread_pool.schedule do
+		Mailer.instance.send(data)
 	end
 end
 
