@@ -11,3 +11,6 @@ mailer
 * address - адрес почтового сервера, например smtp.yandex.ru
 * from - адрес отправителя письма
 * use_tls - false/true
+
+Запуск: 
+* $ruby runner.rb --help
