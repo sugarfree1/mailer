@@ -18,6 +18,6 @@ end
 
 class MailThreadLogger
 	def fail(id, detail)
-		puts "[Thread %s] FAIL. %s.".red % [Thread.current[:id], detail]
+		puts "[Thread %s] FAIL. %s".red % [Thread.current[:id], detail]
 	end
 end

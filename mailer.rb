@@ -32,13 +32,13 @@ class Mailer
 			@authentication = :cram_md5
 		end
 
-		@logger = MailThreadLogger
+		@logger = MailThreadLogger.new
 	end
 
 	def send(data)
 
 		begin
-			Pony.mail(:to => data.has_key?("to") ? data["to"] : raise('No mail recipient.'), 
+			Pony.mail(:to => data.has_key?("to") ? data["to"] : raise('No mail recipient'), 
 				:from => @from,
 				:via => :smtp, 
 				:via_options => {
