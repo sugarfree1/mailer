@@ -1,4 +1,5 @@
 require 'singleton'
+require 'pony'
 require './settings'
 require './loggers'
 
