@@ -1,6 +1,6 @@
 require 'singleton'
-require 'colorize'
 require './settings'
+require './loggers'
 
 class Mailer
 	include Singleton
@@ -28,6 +28,8 @@ class Mailer
 		if @use_tls
 			@authentication = :cram_md5
 		end
+
+		@logger = MailThreadLogger
 	end
 
 	def send(data)
@@ -48,13 +50,13 @@ class Mailer
 				:body => data.has_key?("body") ? data["body"] : "" )
 
 		rescue TimeoutError => e
-			puts "[Thread %s] FAIL. Connection timeout.".red % [Thread.current[:id]]
+			@logger.fail(Thread.current[:id], "Connection timeout")
 
 		rescue IOError => e
-			puts "[Thread %s] FAIL. IOError.".red % [Thread.current[:id]]
+			@logger.fail(Thread.current[:id], "IOError")
 
 		rescue Exception => e
-			puts "[Thread %s] FAIL. %s".red % [Thread.current[:id], e.message]
+			@logger.fail(Thread.current[:id], e.message)
 		end
 
 	end
