@@ -28,9 +28,12 @@ class MasterProcessController
 	end
 
 	def terminate_child(pid)
-		Process.kill("INT", pid)
-		Process.waitpid(pid)
-		@logger.terminated(pid)
+		begin
+			Process.kill("INT", pid)
+			Process.waitpid(pid)
+			@logger.terminated(pid)
+		rescue Errno::ESRCH
+		end
 	end
 
 	def is_child_running?(pid)
