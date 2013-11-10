@@ -10,6 +10,12 @@ class MasterProcessLogger
 	end
 end
 
+class ChildProcessLogger
+	def fail(detail)
+		puts "[Child]: Critical error. %s".red % [detail]
+	end
+end
+
 class MailThreadLogger
 	def fail(id, detail)
 		puts "[Thread %s] FAIL. %s.".red % [Thread.current[:id], detail]

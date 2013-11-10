@@ -2,6 +2,9 @@ require 'singleton'
 require './settings'
 require './loggers'
 
+class CredentialError < Exception
+end
+
 class Mailer
 	include Singleton
 
@@ -64,7 +67,7 @@ class Mailer
 	private
 
 	def get_credential(key)
-		@credentials.has_key?(key) ? @credentials[key] : raise("Wrong user credentials. Missing '#{key}'.")
+		@credentials.has_key?(key) and @credentials[key] != "" ? @credentials[key] : raise(CredentialError, "Wrong user credentials. Missing '#{key}'.")
 	end
 
 end
